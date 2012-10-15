@@ -29,16 +29,28 @@ class Addresses
 {
     protected $addresses;
 
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $addresses
+     */
     public function __construct(ArrayCollection $addresses = null)
     {
         $this->addresses = (!\is_null($addresses)) ? $addresses : new ArrayCollection();
     }
 
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
     public function getAddresses()
     {
         return $this->addresses;
     }
 
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $addresses
+     *
+     * @return Addresses
+     */
     public function setAddresses(ArrayCollection $addresses)
     {
         $this->addresses = $addresses;

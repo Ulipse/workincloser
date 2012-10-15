@@ -28,6 +28,9 @@ use Ulipse\UserBundle\Entity\User;
 
 class AddressRepository extends EntityRepository
 {
+    /**
+     * The minimum distance.
+     */
     const LIMIT = 0.600;
 
     /**
@@ -87,9 +90,8 @@ class AddressRepository extends EntityRepository
             }
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
-
 
     /**
      * @param array $users_ids
@@ -104,7 +106,6 @@ class AddressRepository extends EntityRepository
 
         return $users;
     }
-
 
     /**
      * @param $address

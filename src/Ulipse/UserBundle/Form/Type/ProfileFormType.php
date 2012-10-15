@@ -28,6 +28,10 @@ use Symfony\Component\Security\Core\Validator\Constraint\UserPassword;
 
 class ProfileFormType extends BaseType
 {
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array                                        $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildUserForm($builder, $options);
@@ -42,6 +46,9 @@ class ProfileFormType extends BaseType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'ulipse_user_profile';

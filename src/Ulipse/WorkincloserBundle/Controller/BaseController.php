@@ -54,25 +54,4 @@ class BaseController extends Controller
     {
         return $this->container->getParameter($parameter);
     }
-
-    /**
-     * @param string $id
-     * @return object
-     * @throws \LogicException
-     */
-    public function get($id)
-    {
-        if ('entity_manger' == $id) {
-            if (!$this->container->has('doctrine.orm.entity_manager')) {
-                throw new \LogicException('The DoctrineBundle is not registered in your application.');
-            }
-            if ($this->container->has('entity_manager')) {
-                return parent::get('entity_manager');
-            }
-
-            return $this->container->get('doctrine.orm.entity_manager');
-        }
-
-        return $this->container->get($id);
-    }
 }

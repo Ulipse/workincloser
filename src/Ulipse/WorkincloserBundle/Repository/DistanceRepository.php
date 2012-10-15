@@ -26,7 +26,12 @@ use Doctrine\ORM\EntityRepository;
 
 class DistanceRepository extends EntityRepository
 {
-
+    /**
+     * @param $first
+     * @param $second
+     *
+     * @return object|null
+     */
     public function getDistance($first, $second)
     {
         $qb = $this->_em->createQueryBuilder();

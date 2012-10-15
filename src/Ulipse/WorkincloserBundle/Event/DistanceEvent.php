@@ -31,17 +31,27 @@ class DistanceEvent extends Event
     protected $addresses;
     protected $user;
 
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $addresses
+     * @param \Ulipse\UserBundle\Entity\User               $user
+     */
     public function __construct(ArrayCollection $addresses, User $user)
     {
         $this->addresses = $addresses;
         $this->user      = $user;
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
     public function getAddresses()
     {
         return $this->addresses;
     }
 
+    /**
+     * @return \Ulipse\UserBundle\Entity\User
+     */
     public function getUser()
     {
         return $this->user;

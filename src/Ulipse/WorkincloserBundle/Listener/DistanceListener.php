@@ -30,12 +30,19 @@ class DistanceListener
     protected $em;
     protected $address_type;
 
+    /**
+     * @param $em
+     * @param $address_type
+     */
     public function __construct($em, $address_type)
     {
         $this->em = $em;
         $this->address_type = $address_type;
     }
 
+    /**
+     * @param \Ulipse\WorkincloserBundle\Event\DistanceEvent $event
+     */
     public function onSetAddress(DistanceEvent $event)
     {
         foreach ($this->address_type as $type) {
@@ -43,6 +50,11 @@ class DistanceListener
         }
     }
 
+    /**
+     * @param $addresses
+     * @param $user
+     * @param $type
+     */
     public function setDistances($addresses, $user, $type)
     {
         $entity = $addresses[$type];

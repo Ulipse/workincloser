@@ -29,6 +29,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AddressType extends AbstractType
 {
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array                                        $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -38,6 +42,9 @@ class AddressType extends AbstractType
         ;
     }
 
+    /**
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -46,6 +53,9 @@ class AddressType extends AbstractType
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'ulipse_workincloserbundle_addresstype';

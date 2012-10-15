@@ -24,8 +24,15 @@ namespace Ulipse\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use Ulipse\UserBundle\Entity\User;
+
 class UserRepository extends EntityRepository
 {
+    /**
+     * @param \Ulipse\UserBundle\Entity\User $user
+     *
+     * @return array
+     */
     public function getAddresses(User $user)
     {
         $qb = $this->_em->createQueryBuilder();

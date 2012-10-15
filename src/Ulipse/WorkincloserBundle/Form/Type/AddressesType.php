@@ -29,19 +29,30 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AddressesType extends AbstractType
 {
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array                                        $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('addresses', 'collection', array('type' => new AddressType()));
     }
 
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
     public function getDefaultOptions(array $options)
     {
         return array('data_class' => '\Ulipse\WorkincloserBundle\Entity\Addresses');
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'ulipse_workincloserbundle_addressestype';
     }
-
 }
