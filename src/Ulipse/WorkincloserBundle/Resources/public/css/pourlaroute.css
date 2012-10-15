@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Tahoma, sans-serif;
+}
+
+body{
+    background: #FFF;
+}
+
+.form_map_container{
+    width: 801px;
+    height: 276px;
+    position: absolute;
+    margin: -60px 20px;
+    background:#FBFBFB;
+    box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 3px 0 #B3B3B3;
+    -webkit-box-shadow:0 0.5px 0 0 #ffffff inset, 0 1px 5px 0 #B3B3B3;
+    padding: 10px;
+    border-radius: 2px;
+}
+.form_map_container:before{
+    content: "";
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid #4C769D;
+    border-top:2px solid #4C769D;
+    margin: -6px 180px;
+    border-right: 2px solid #EEE;
+    border-top:2px solid #EEE;
+    background: #FBFBFB;
+    position: absolute;
+    margin: -15px 680px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    z-index: 0;
+}
+
+.form_map_input_text{
+    height: 32px;
+    padding: 5px 10px;
+    font-size: 18px;
+    width: 780px;
+    border: 1px solid #E1E2E3;
+    outline: none;
+}
+.form_map_gmap{
+    width: 800px;
+    height: 220px;
+    border: 1px solid #E1E2E3;
+    margin: 10px 0;
+    background: #A5BFDD;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+input::-webkit-input-placeholder {
+    color:    #DDD;
+}
+input:-moz-placeholder {
+    color:    #DDD;
+}
+input:-ms-input-placeholder {
+    color:    #DDD;
+}

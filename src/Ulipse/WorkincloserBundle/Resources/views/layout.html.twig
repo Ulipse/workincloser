@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Workincloser{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+    {% block header %}
+        <header>
+            <div id="header_wrap">
+                <div class="logo"><img src="{{ asset('bundles/ulipseworkincloser/images/logo-small.png') }}"></div>
+                <ul>
+                    <li><a href="{{ path('index') }}">Home</a></li>
+                    <li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+                    <li><a href="{{ path('fos_message_inbox') }}">Message</a></li>
+                    <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </header>
+    {% endblock %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}
+        <footer>
+            <p><a href="{{ path('about') }}">About</a> <a href="{{ path('help') }}">Help</a> <a href="{{ path('conditions') }}"> Terms & Conditions </a> <a href="{{ path('privacy') }}">Privacy Policy</a> <a href="">Contact</a></p>
+        </footer>
+    {% endblock %}
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

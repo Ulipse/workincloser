@@ -1,0 +1,8 @@
+{% if not matching %}
+<div class="maching_profils"><h1 class="nomatching">No matching profiles found</h1><h2 class="h2nomatching">please set your work and living addresses...</h2></div>
+{% else %}
+    <h1>Matchin' profils :</h1>
+    {% for profile in matching %}
+        <a href="">{{ profile.username }}</a>
+    {% endfor %}
+{% endif %}

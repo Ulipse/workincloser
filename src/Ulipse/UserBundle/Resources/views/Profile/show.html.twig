@@ -1,0 +1,9 @@
+{% extends "UlipseWorkincloserBundle::layout.html.twig" %}
+
+
+{% block content %}
+    {% block fos_user_content %}
+        <a href="{{ path('fos_user_profile_edit') }}">edit</a>
+        {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+    {% endblock fos_user_content %}
+{% endblock %}

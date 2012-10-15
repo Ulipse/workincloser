@@ -1,0 +1,33 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/ulipseworkincloser/css/base.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div id="wrap">
+        <a href="" id="new">I'm new here !</a>
+        <div id="block_login">
+            {% block fos_user_content %}
+            Sign in
+            {% if error %}
+                <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+            {% endif %}
+
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'security.login.username_email'|trans({}, 'UlipseUserBundle') }}" required="required" />
+                <input type="password" id="password" name="_password" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" required="required" />
+
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                <label for="remember_me" class="check">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+
+                <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+            </form>
+        {% endblock fos_user_content %}
+        </div>
+        <div id="presentation">{% block presentation %}<img src="{{ asset('bundles/ulipseworkincloser/images/logo.png') }}">{% endblock %}</div>
+
+        <div id="footer">{% block footer %} <a href="{{ path('about') }}">About</a> <a href="{{ path('help') }}">Help</a> <a href="{{ path('conditions') }}"> Terms & Conditions </a> <a href="{{ path('privacy') }}">Privacy Policy</a> <a href="">Contact</a>{% endblock %}</div>
+    </div>
+{% endblock %}

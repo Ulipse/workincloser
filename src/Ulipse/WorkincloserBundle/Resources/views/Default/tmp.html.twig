@@ -1,0 +1,11 @@
+{% extends "UlipseWorkincloserBundle::layout.html.twig" %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/ulipseworkincloser/css/pourlaroute.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="form_map_container">
+        <input type="text" class="form_map_input_text" placeholder="Home address...">
+        <div class="form_map_gmap" id="gmap_workat"></div>
+    </div>
+{% endblock %}

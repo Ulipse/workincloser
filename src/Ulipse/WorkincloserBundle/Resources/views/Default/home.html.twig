@@ -1,0 +1,92 @@
+{% extends "UlipseWorkincloserBundle::layout.html.twig" %}
+
+{% block content %}
+    {% set types = {'workat' : 'Work At', 'liveat' : 'Live At'} %}
+        <form action="{{path('index')}}" method="post" id="geocoding_form" {{ form_enctype(form) }}>
+            {% for type, title in types %}
+                <div class="input">
+
+                    {{ form_widget(form.addresses[type].text, { 'attr': {'class':'address_text_'~type, 'placeholder':'Your Address...','autocomplete' : 'off'}}) }}
+                    {{ form_widget(form.addresses[type].latitude, { 'attr': {'class':'lat', 'placeholder':'Latitude...', 'autocomplete' : 'off' }}) }}
+                    {{ form_widget(form.addresses[type].longitude, { 'attr': {'class':'lng', 'placeholder':'Longitude...', 'autocomplete' : 'off' }}) }}
+                    <input type="submit" class="btn_{{ type }}" value="Search">
+                </div>
+                <div class="popin">
+                    <div id="map_{{ type }}" style="position: relative; width: 600px;height: 300px;background-color: rgb(229, 227, 223); overflow: hidden; -webkit-transform: translateZ(0); "></div>
+                </div>
+            {% endfor %}
+            {{ form_rest(form) }}
+            <input type="submit" value="save" id="save">
+        </form>
+        <div class="maching_profils"><h1 class="nomatching">No matching profiles found</h1><h2 class="h2nomatching">please set your work and living addresses...</h2></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/ulipseworkincloser/js/jquery.js')  }}"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ulipseworkincloser/js/gmaps.js') }}"></script>
+    <script type="text/javascript">
+        var map_work, map_live;
+
+        function geocode_map(GMaps , map, css_class)
+        {
+            GMaps.geocode({
+                address: $('.'+ css_class).val().trim(),
+                callback: function(results, status){
+                    if(status=='OK'){
+                        var latlng = results[0].geometry.location;
+                        map.setCenter(latlng.lat(), latlng.lng());
+                        map.addMarker({
+                            lat: latlng.lat(),
+                            lng: latlng.lng()
+                        });
+                        $('.'+css_class).parents('.input').find('input.lat').val(latlng.lat());
+                        $('.'+css_class).parents('.input').find('input.lng').val(latlng.lng());
+                    }
+                }
+            });
+        }
+        $(document).ready(function(){
+            var lat_workat = $('#ulipse_workincloserbundle_addressestype_addresses_workat_latitude').val();
+            var lng_workat = $('ulipse_workincloserbundle_addressestype_addresses_workat_longitude').val();
+            map_work = new GMaps({
+                el: '#map_workat',
+                lat: (lat_workat == '') ? -12.043333 : lat_workat ,
+                lng: (lng_workat == '') ? -77.028333 : lng_workat
+            });
+            map_live = new GMaps({
+                el: '#map_liveat',
+                lat: -12.043333,
+                lng: -77.028333
+            });
+            $('#geocoding_form').submit(function(e){
+                e.preventDefault();
+
+                if (('' != $('.address_text_liveat').val()) && ('' != $('.address_text_workat').val())) {
+                    var form_data = $('form').serialize();
+                    $.ajax({
+                        url:"{{ path('index') }}",
+                        dataType: "json",
+                        type: "post",
+                        data: form_data,
+                        success : function (data) {
+                         console.log(data);
+                        }
+
+                    });
+                } else {
+                    console.log('NOPE');
+                }
+
+            });
+            $('.btn_workat').live('click', function(e){
+                e.preventDefault();
+                geocode_map(GMaps, map_work, 'address_text_workat');
+            });
+            $('.btn_liveat').live('click', function(e){
+                e.preventDefault();
+                geocode_map(GMaps, map_live, 'address_text_liveat');
+            });
+        });
+    </script>
+{% endblock %}

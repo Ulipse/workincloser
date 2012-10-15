@@ -1,0 +1,11 @@
+parameters:
+    address.type : ['workat', 'liveat']
+
+services:
+    ulipseworkincloser_bundle.listener.settingaddress:
+        class: Ulipse\WorkincloserBundle\Listener\DistanceListener
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            address.type : %address.type%
+        tags:
+            - { name: kernel.event_listener, event: ulipseworkincloser_bundle.address.setting, method: onSetAddress }
