@@ -20,15 +20,10 @@
  * along with Workincloser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Ulipse\MessageBundle;
+namespace Ulipse\ExtraBundle\Repository;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Doctrine\ORM\EntityRepository;
 
-class UlipseMessageBundle extends Bundle
-{
-	public function getParent()
-	{
-		return 'FOSMessageBundle';
-	}
-
+class BaseRepository extends EntityRepository {
+    
 }

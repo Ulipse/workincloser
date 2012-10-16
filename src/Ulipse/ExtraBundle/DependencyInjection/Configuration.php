@@ -20,15 +20,21 @@
  * along with Workincloser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Ulipse\MessageBundle;
+namespace Ulipse\ExtraBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class UlipseMessageBundle extends Bundle
+class Configuration implements ConfigurationInterface
 {
-	public function getParent()
-	{
-		return 'FOSMessageBundle';
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('ulipse_extra');
 
+        return $treeBuilder;
+    }
 }

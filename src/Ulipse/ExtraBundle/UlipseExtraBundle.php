@@ -20,15 +20,11 @@
  * along with Workincloser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Ulipse\MessageBundle;
+namespace Ulipse\ExtraBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class UlipseMessageBundle extends Bundle
+class UlipseExtraBundle extends Bundle
 {
-	public function getParent()
-	{
-		return 'FOSMessageBundle';
-	}
 
 }

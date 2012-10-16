@@ -20,15 +20,24 @@
  * along with Workincloser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Ulipse\MessageBundle;
+namespace Ulipse\ExtraBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Loader;
 
-class UlipseMessageBundle extends Bundle
+class UlipseExtraExtension extends Extension
 {
-	public function getParent()
-	{
-		return 'FOSMessageBundle';
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
 
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.xml');
+    }
 }
