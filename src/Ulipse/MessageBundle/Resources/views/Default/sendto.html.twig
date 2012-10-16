@@ -1,0 +1,22 @@
+{% extends "UlipseWorkincloserBundle::layout.html.twig" %}
+
+{% block content %}
+{{ user.username }}
+<ul>
+{% for address in addresses %}
+    <li>{{ address.type }}: {{ address.text }}</li>
+{% endfor %}
+</ul>
+<form action="">
+    <dl>
+        <dd><input type="text" value="" placeholder="subject"></dd>
+        <dd><textarea></textarea></dd>
+    </dl>
+
+    <input name="send" value="send a message to {{ user.username }}" type="submit">
+</form>
+{% for t in thread %}
+    {{ t.id }}
+{% endfor %}
+
+{% endblock %}

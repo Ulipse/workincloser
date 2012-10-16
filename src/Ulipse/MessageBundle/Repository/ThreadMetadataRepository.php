@@ -20,39 +20,18 @@
  * along with Workincloser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Ulipse\MessageBundle\Entity;
+namespace Ulipse\MessageBundle\Repository;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityRepository;
 
-use FOS\MessageBundle\Entity\ThreadMetadata as BaseThreadMetadata;
+use Ulipse\UserBundle\Entity\User;
 
-
-/**
- * @ORM\Entity(repositoryClass="Ulipse\MessageBundle\Repository\ThreadMetadataRepository")
- * @ORM\Table(name="message_thread_metadata")
- */
-class ThreadMetadata extends BaseThreadMetadata
+class ThreadMetadataRepository extends EntityRepository
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\generatedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Ulipse\MessageBundle\Entity\Thread", inversedBy="metadata")
-     */
-    protected $thread;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Ulipse\UserBundle\Entity\User")
-     */
-    protected $participant;
-
-
-    public function __toString()
+    public function getThreadByParticipants(User $first, User $second)
     {
-        return 'merde';
+        //select * from message m inner join message_thread_metadata mt on (m.thread_id = mt.thread_id) where (user_id = 1 and participant_id = 2) or (user_id = 2 and participant_id = 1);
+        //$qb = $this->_em->createQueryBuilder();
+            return \array_intersect($this->findByParticipant($first), $this->findByParticipant($second));
     }
 }

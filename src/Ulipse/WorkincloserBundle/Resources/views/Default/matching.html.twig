@@ -3,6 +3,6 @@
 {% else %}
     <h1>Matchin' profils :</h1>
     {% for profile in matching %}
-        <a href="">{{ profile.username }}</a>
+        <a href="{{ path('send_to_user', { 'id' : profile.id} ) }}">{{ profile.username }}</a>
     {% endfor %}
 {% endif %}

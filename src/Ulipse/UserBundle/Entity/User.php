@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Ulipse\UserBundle\Entity\User
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Ulipse\UserBundle\Repository\UserRepository")
  */
 class User extends BaseUser implements ParticipantInterface
 {

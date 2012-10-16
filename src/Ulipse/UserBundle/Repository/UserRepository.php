@@ -39,7 +39,7 @@ class UserRepository extends EntityRepository
 
         $qb->select('a')
             ->from('UlipseWorkincloserBundle:Address', 'a')
-            ->where('a.user != :user')
+            ->where('a.user = :user')
             ->setParameter('user', $user->getId())
         ;
 

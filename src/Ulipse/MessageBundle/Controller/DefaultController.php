@@ -25,17 +25,27 @@ namespace Ulipse\MessageBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Ulipse\UserBundle\Entity\User;
+use Ulipse\WorkincloserBundle\Controller\BaseController;
 /**
  * @Route("/message")
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
-     * @Route("/sendto/{user_id}", name="send_to_user")
+     * @Route("/sendto/{id}", name="send_to_user")
+     * @ParamConverter("user", class="UlipseUserBundle:User")
+     * @Template()
      */
-    public function sendToAction()
+    public function sendToAction(User $user)
     {
-        //Todo : Add a send message action to a correspondin' profile
+        $addresses = $this->getRepository('UlipseUserBundle:User')->getAddresses($user);
+
+        $user2 = $this->getRepository('UlipseUserBundle:User')->find(2);
+        $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadByParticipants($user, $user2);
+
+        return array('user' => $user, 'addresses' => $addresses, 'thread' => $thread);
     }
 }
