@@ -1,6 +1,7 @@
 {% extends "UlipseWorkincloserBundle::layout.html.twig" %}
 
 {% block content %}
+    <h1>Your Addresses : </h1>
     {% set types = {'workat' : 'Work At', 'liveat' : 'Live At'} %}
         <form action="{{path('index')}}" method="post" id="geocoding_form" {{ form_enctype(form) }}>
             {% for type, title in types %}

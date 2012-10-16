@@ -47,6 +47,7 @@ class DistanceRepository extends EntityRepository
         try {
             return $qb->getQuery()->getOneOrNullResult();
         } catch (Doctrine\ORM\NonUniqueResultException $e) {
+            //Todo : add log alert message using logger.
             return null;
         }
     }

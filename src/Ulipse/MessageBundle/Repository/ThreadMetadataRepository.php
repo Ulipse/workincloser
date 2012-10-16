@@ -28,10 +28,32 @@ use Ulipse\UserBundle\Entity\User;
 
 class ThreadMetadataRepository extends EntityRepository
 {
-    public function getThreadByParticipants(User $first, User $second)
+    /**
+     * @param \Ulipse\UserBundle\Entity\User $first
+     * @param \Ulipse\UserBundle\Entity\User $second
+     *
+     * @return null|object
+     */
+    public function getThreadMetadataByParticipants(User $first, User $second)
     {
         //select * from message m inner join message_thread_metadata mt on (m.thread_id = mt.thread_id) where (user_id = 1 and participant_id = 2) or (user_id = 2 and participant_id = 1);
-        //$qb = $this->_em->createQueryBuilder();
-            return \array_intersect($this->findByParticipant($first), $this->findByParticipant($second));
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('m')
+           ->from('UlipseMessageBundle:Message', 'm')
+           ->innerJoin('m.thread', 'mt')
+           ->where('m.sender = :first AND mt.participant = :second')
+           ->orWhere('m.sender = :second AND mt.participant = :first')
+           ->setParameter('first', $first->getId())
+           ->setParameter('second', $second->getId())
+           ->groupBy('m.thread');
+        ;
+
+        try {
+            return $qb->getQuery()->getOneOrNullResult();
+        } catch (Doctrine\ORM\NonUniqueResultException $e) {
+            //Todo : add log alert message using logger.
+            return null;
+        }
     }
 }
