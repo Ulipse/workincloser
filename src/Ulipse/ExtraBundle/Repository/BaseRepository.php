@@ -24,6 +24,7 @@ namespace Ulipse\ExtraBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class BaseRepository extends EntityRepository {
-    
+class BaseRepository extends EntityRepository
+{
+
 }
