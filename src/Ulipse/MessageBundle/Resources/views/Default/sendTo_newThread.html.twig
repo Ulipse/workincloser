@@ -1,0 +1,18 @@
+{% extends "UlipseWorkincloserBundle::layout.html.twig" %}
+
+{% block content %}
+    {{ second.username }}
+    <ul>
+        {% for address in addresses %}
+            <li>{{ address.type }}: {{ address.text }}</li>
+        {% endfor %}
+    </ul>
+    <form action="{{ url('fos_message_thread_new') }}" method="post" {{ form_enctype(form) }}>
+
+        {{ form_widget(form.recipient, {'attr' : {'value': second.username, 'hidden':'hidden' }}) }}
+        {{ form_widget(form.subject, {'attr' : { 'placeholder': 'Subject...'}}) }}
+        {{ form_widget(form.body, {'attr' : { 'placeholder': 'Your message...'}}) }}
+        <input type="submit" value="Send message to {{ second.username }}" />
+        {{ form_rest(form) }}
+    </form>
+{% endblock %}

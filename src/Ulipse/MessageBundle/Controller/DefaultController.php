@@ -28,6 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Ulipse\UserBundle\Entity\User;
+use FOS\UserBundle\Model\UserInterface;
 use Ulipse\WorkincloserBundle\Controller\BaseController;
 /**
  * @Route("/message")
@@ -36,16 +37,37 @@ class DefaultController extends BaseController
 {
     /**
      * @Route("/sendto/{id}", name="send_to_user")
-     * @ParamConverter("user", class="UlipseUserBundle:User")
-     * @Template()
+     * @ParamConverter("second", class="UlipseUserBundle:User")
      */
-    public function sendToAction(User $user)
+    public function sendToAction(User $second)
     {
-        $addresses = $this->getRepository('UlipseUserBundle:User')->getAddresses($user);
+        //Todo : Secure this section, is_autorised_to_send_message_to($recipient) ?!
+        $addresses = $this->getRepository('UlipseUserBundle:User')->getAddresses($second);
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $user2 = $this->getRepository('UlipseUserBundle:User')->find(2);
-        $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadByParticipants($user, $user2);
+        if (!\is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
 
-        return array('user' => $user, 'addresses' => $addresses, 'thread' => $thread);
+        $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadMetadataByParticipants($user, $second);
+
+        if (!\is_null($thread)) {
+            $form = $this->get('fos_message.reply_form.factory')->create($thread);
+
+            return $this->get('templating')->renderResponse('UlipseMessageBundle:Default:sendto.html.twig', array(
+                'second' => $second,
+                'addresses' => $addresses,
+                'thread' => $thread,
+                'form' => $form->createView())
+            );
+
+        } else {
+            $form = $this->get('fos_message.new_thread_form.factory')->create();
+            return $this->get('templating')->renderResponse('UlipseMessageBundle:Default:sendto_newThread.html.twig', array(
+                    'second' => $second,
+                    'addresses' => $addresses,
+                    'form' => $form->createView())
+            );
+        }
     }
 }

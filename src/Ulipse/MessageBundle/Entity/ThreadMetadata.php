@@ -50,9 +50,4 @@ class ThreadMetadata extends BaseThreadMetadata
      */
     protected $participant;
 
-
-    public function __toString()
-    {
-        return 'merde';
-    }
 }

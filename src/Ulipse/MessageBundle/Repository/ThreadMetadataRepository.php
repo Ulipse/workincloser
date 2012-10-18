@@ -36,12 +36,11 @@ class ThreadMetadataRepository extends EntityRepository
      */
     public function getThreadMetadataByParticipants(User $first, User $second)
     {
-        //select * from message m inner join message_thread_metadata mt on (m.thread_id = mt.thread_id) where (user_id = 1 and participant_id = 2) or (user_id = 2 and participant_id = 1);
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('m')
            ->from('UlipseMessageBundle:Message', 'm')
-           ->innerJoin('m.thread', 'mt')
+           ->innerJoin('m.metadata', 'mt')
            ->where('m.sender = :first AND mt.participant = :second')
            ->orWhere('m.sender = :second AND mt.participant = :first')
            ->setParameter('first', $first->getId())
@@ -50,9 +49,12 @@ class ThreadMetadataRepository extends EntityRepository
         ;
 
         try {
-            return $qb->getQuery()->getOneOrNullResult();
+            $message = $qb->getQuery()->getOneOrNullResult();
+            return ($message)? $message->getThread(): null;
         } catch (Doctrine\ORM\NonUniqueResultException $e) {
             //Todo : add log alert message using logger.
+            return null;
+        } catch (\Exception $e) {
             return null;
         }
     }
