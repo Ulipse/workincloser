@@ -56,7 +56,14 @@ class User extends BaseUser implements ParticipantInterface
      */
     private $firstname;
 
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
+     * Get Phone
      *
      * @return string
      */
@@ -66,12 +73,26 @@ class User extends BaseUser implements ParticipantInterface
     }
 
 
+    /**
+     * Set Phone
+     *
+     * @param $phone
+     *
+     * @return User
+     */
     public function setPhone($phone)
     {
         $this->phone = $phone;
         return $this;
     }
 
+    /**
+     * Set Firstname
+     *
+     * @param $firstname
+     *
+     * @return User
+     */
     public function setFirstName($firstname)
     {
         $this->firstname = $firstname;
@@ -79,14 +100,14 @@ class User extends BaseUser implements ParticipantInterface
         return $this;
     }
 
+    /**
+     * Get Firstname
+     *
+     * @return string
+     */
     public function getFirstName()
     {
         return $this->firstname;
-    }
-
-    public function __construct()
-    {
-        parent::__construct();
     }
 
 }
