@@ -94,6 +94,26 @@ class AddressRepository extends EntityRepository
     }
 
     /**
+     * @param \Ulipse\UserBundle\Entity\User $first
+     * @param \Ulipse\UserBundle\Entity\User $second
+     *
+     * @return bool
+     */
+    public function areCompatible(User $first, User $second)
+    {
+        $users = $this->getMatchingUsersWith($first);
+        if ($users) {
+            foreach ($users as $user) {
+                if ($user == $second) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param array $users_ids
      * @return array
      */

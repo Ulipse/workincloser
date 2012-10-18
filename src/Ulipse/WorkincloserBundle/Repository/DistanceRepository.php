@@ -49,6 +49,8 @@ class DistanceRepository extends EntityRepository
         } catch (Doctrine\ORM\NonUniqueResultException $e) {
             //Todo : add log alert message using logger.
             return null;
+        } catch (\Exception $e) {
+            return null;
         }
     }
 }

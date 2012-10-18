@@ -41,32 +41,34 @@ class DefaultController extends BaseController
      */
     public function sendToAction(User $second)
     {
-        //Todo : Secure this section, is_autorised_to_send_message_to($recipient) ?!
         $addresses = $this->getRepository('UlipseUserBundle:User')->getAddresses($second);
-        $user = $this->get('security.context')->getToken()->getUser();
+        $first = $this->get('security.context')->getToken()->getUser();
 
-        if (!\is_object($user) || !$user instanceof UserInterface) {
+        if (!$this->getRepository('UlipseWorkincloserBundle:Address')->areCompatible($first, $second)) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadMetadataByParticipants($user, $second);
+        if (!\is_object($first) || !$first instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadMetadataByParticipants($first, $second);
 
         if (!\is_null($thread)) {
             $form = $this->get('fos_message.reply_form.factory')->create($thread);
 
             return $this->get('templating')->renderResponse('UlipseMessageBundle:Default:sendto.html.twig', array(
-                'second' => $second,
+                'second'    => $second,
                 'addresses' => $addresses,
-                'thread' => $thread,
-                'form' => $form->createView())
+                'thread'    => $thread,
+                'form'      => $form->createView())
             );
-
         } else {
             $form = $this->get('fos_message.new_thread_form.factory')->create();
             return $this->get('templating')->renderResponse('UlipseMessageBundle:Default:sendto_newThread.html.twig', array(
-                    'second' => $second,
+                    'second'    => $second,
                     'addresses' => $addresses,
-                    'form' => $form->createView())
+                    'form'      => $form->createView())
             );
         }
     }

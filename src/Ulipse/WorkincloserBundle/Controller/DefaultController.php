@@ -23,7 +23,8 @@
 namespace Ulipse\WorkincloserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route,
-    Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Template,
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 use Symfony\Component\HttpFoundation\Response,
     Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -37,6 +38,7 @@ class DefaultController extends BaseController
 {
     /**
      * @Route("/privacy", name="privacy")
+     * @Cache(expires="tomorrow")
      */
     public function privacyAction()
     {
@@ -45,6 +47,7 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/about", name="about")
+     * @Cache(expires="tomorrow")
      */
     public function aboutAction()
     {
@@ -53,6 +56,7 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/help", name="help")
+     * @Cache(expires="tomorrow")
      */
     public function helpAction()
     {
@@ -61,6 +65,7 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/conditions", name="conditions")
+     * @Cache(expires="tomorrow")
      */
     public function conditionsAction()
     {

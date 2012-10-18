@@ -52,7 +52,6 @@ class ThreadMetadataRepository extends EntityRepository
             $message = $qb->getQuery()->getOneOrNullResult();
             return ($message)? $message->getThread(): null;
         } catch (Doctrine\ORM\NonUniqueResultException $e) {
-            //Todo : add log alert message using logger.
             return null;
         } catch (\Exception $e) {
             return null;
