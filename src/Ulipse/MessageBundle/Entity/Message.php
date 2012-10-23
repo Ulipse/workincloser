@@ -41,7 +41,7 @@ class Message extends BaseMessage
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Ulipse\MessageBundle\Entity\Thread", inversedBy="messages" )
+     * @ORM\ManyToOne(targetEntity="Ulipse\MessageBundle\Entity\Thread", inversedBy="messages")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id")
      */
     protected $thread;

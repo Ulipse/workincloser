@@ -12,6 +12,6 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        $this->assertTrue($crawler->filter('html:contains("Your Addresses")')->count() > 0);
+        $this->assertFalse($crawler->filter('html:contains("Your Addresses")')->count() > 0);
     }
 }
