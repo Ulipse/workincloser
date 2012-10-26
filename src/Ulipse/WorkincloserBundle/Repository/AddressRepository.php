@@ -54,46 +54,6 @@ class AddressRepository extends EntityRepository
     }
 
     /**
-     * @param \Ulipse\UserBundle\Entity\User $user
-     * @return array or null
-     */
-    public function getMatchingUsersWith(User $user)
-    {
-        $addresses = $this->findByUser($user);
-
-        $distances = array();
-        foreach ($addresses as $address) {
-            $distances[] = \array_merge($this->getMatchingUsersWithFirstAddress($address),
-            $this->getMatchingUsersWithSecondAddress($address));
-        }
-
-        return $this->getUsersFromDistancesOfUser($user, $distances);
-    }
-
-
-    /**
-     * @param \Ulipse\UserBundle\Entity\User $user
-     * @param array $distances
-     * @return array
-     */
-    public function getUsersFromDistancesOfUser(User $user, $distances = array())
-    {
-        $result = array();
-        foreach ($distances as $ds) {
-            foreach ($ds as $distance) {
-                if ($distance->getFirst()->getUser() != $user) {
-                    $result[] = $distance->getFirst()->getUser();
-                }
-                if ($distance->getSecond()->getUser() != $user) {
-                    $result[] = $distance->getSecond()->getUser();
-                }
-            }
-        }
-
-        return \array_unique($result);
-    }
-
-    /**
      * @param \Ulipse\UserBundle\Entity\User $first
      * @param \Ulipse\UserBundle\Entity\User $second
      *
@@ -101,7 +61,7 @@ class AddressRepository extends EntityRepository
      */
     public function areCompatible(User $first, User $second)
     {
-        $users = $this->getMatchingUsersWith($first);
+        $users = $this->getUsersMatchingWith($first);
         if ($users) {
             foreach ($users as $user) {
                 if ($user == $second) {
@@ -112,56 +72,69 @@ class AddressRepository extends EntityRepository
 
         return false;
     }
-
+    
     /**
-     * @param array $users_ids
+     * 
+     * @param type $user
+     * @param type $type
      * @return array
      */
-    public function getUsersById(array $users_ids)
+    public function getMatchingDistanceBy($user, $type)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        
+        $qb->select('d')
+                ->from('UlipseWorkincloserBundle:Distance','d')
+                ->innerJoin('d.first', 'f')
+                ->innerJoin('d.second', 's')
+                ->where('f.user =:first OR s.user =:second')
+                ->andWhere('f.type =:type')
+                ->andWhere('d.distance < :limit')
+                ->setParameter('first', $user->getId())
+                ->setParameter('second', $user->getId())
+                ->setParameter('limit', AddressRepository::LIMIT)
+                ->setParameter('type', $type)
+        ;
+        
+        return ($qb->getQuery()->getResult())? : array();
+    }
+    
+    /**
+     * 
+     * @param type $distances
+     * @param type $user
+     * @return type
+     */
+    public function getUsersByDistances($distances, $user)
     {
         $users = array();
-        foreach ($users_ids as $user_id) {
-            $users[] = $this->_em->getRepository('UlipseUserBundle:User')->find($user_id);
+        foreach ($distances as $distance) {
+            if ($distance->getFirst()->getUser() != $user) {
+                $users[] = $distance->getFirst()->getUser();
+            }
+            if ($distance->getSecond()->getUser() != $user) {
+                $users[] = $distance->getSecond()->getUser();
+            }     
         }
-
+       
         return $users;
     }
-
+    
     /**
-     * @param $address
-     * @return array
+     * 
+     * @param type $user
+     * @return array|null
      */
-    public function getMatchingUsersWithFirstAddress($address)
+    public function getUsersMatchingWith($user)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('d')
-            ->from('UlipseWorkincloserBundle:Distance', 'd')
-            ->innerJoin('d.second', 'a')
-            ->where('d.first = :first')
-            ->andWhere('d.distance < :limit')
-            ->setParameter('first', $address->getId())
-            ->setParameter('limit', AddressRepository::LIMIT)
-        ;
-
-        return $qb->getQuery()->getResult()? : array();
-    }
-
-    /**
-     * @param $address
-     * @return array
-     */
-    public function getMatchingUsersWithSecondAddress($address)
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('d')
-            ->from('UlipseWorkincloserBundle:Distance', 'd')
-            ->innerJoin('d.first', 'a')
-            ->where('d.second = :second')
-            ->andWhere('d.distance < :limit')
-            ->setParameter('second', $address->getId())
-            ->setParameter('limit', AddressRepository::LIMIT)
-        ;
-
-        return ($qb->getQuery()->getResult())? : array();
+        $workat_compatible_distances = $this->getMatchingDistanceBy($user, 'workat');
+        $liveat_compatible_distances = $this->getMatchingDistanceBy($user, 'liveat');
+        
+        if ($liveat_compatible_distances && $workat_compatible_distances) {
+            return \array_intersect($this->getUsersByDistances($workat_compatible_distances, $user), 
+                    $this->getUsersByDistances($liveat_compatible_distances, $user));
+        }
+        
+        return null;
     }
 }

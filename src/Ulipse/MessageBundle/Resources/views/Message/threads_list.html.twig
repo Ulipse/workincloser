@@ -1,5 +1,4 @@
-<table>
-
+<table class="table">
     <thead>
         <tr>
             <th>{% trans from 'FOSMessageBundle' %}subject{% endtrans %}</th>
@@ -48,7 +47,7 @@
                 </td>
                 <td>
                     <form action="{{ url('fos_message_thread_delete', {'threadId': thread.id}) }}" method="post">
-                        <input type="submit" value="Delete" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
                     </form>
                 </td>
             </tr>

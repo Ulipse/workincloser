@@ -128,8 +128,19 @@ class DefaultController extends BaseController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $matching = $this->getRepository('UlipseWorkincloserBundle:Address')->getMatchingUsersWith($user);
+        $matching = $this->getRepository('UlipseWorkincloserBundle:Address')->getUsersMatchingWith($user);
 
         return $this->render("UlipseWorkincloserBundle:Default:matching.html.twig", array('matching' => $matching));
+    }
+    
+    /**
+     * @Route("/fucking", name="fucking")
+     */
+    public function fuckingAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        var_dump($this->getRepository('UlipseWorkincloserBundle:Address')->getUsersMatchingWith($user));
+        exit;
+        
     }
 }
