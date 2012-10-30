@@ -26,14 +26,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
-use FOS\UserBundle\Model\UserInterface;
+
 use Ulipse\WorkincloserBundle\Controller\BaseController;
 use Ulipse\UserBundle\Entity\User;
 
+use FOS\UserBundle\Model\UserInterface;
 use FOS\MessageBundle\FormModel\NewThreadMessage;
 
 
@@ -82,52 +84,35 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/sendto", name="ulipse_message_thread_new")
+     * @Method({"POST"})
      */
     public function newThreadAction()
     {
-        //TODO : refactor this action using handler && add responses
-        $request = $this->get('request');
-        $form = $this->get('fos_message.new_thread_form.factory')->create();
-        $message = new \FOS\MessageBundle\FormModel\NewThreadMessage();
         $user = $this->get('security.context')->getToken()->getUser();
 
         if (!\is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
         
+        $form = $this->get('fos_message.new_thread_form.factory')->create();
+        
+        $request = $this->get('request');
         if ('POST' == $request->getMethod()) {
             $form->bind($request);
-
-            
             if ($form->isValid()) {
                 $message = $form->getData();
+                
                 if (!$message instanceof NewThreadMessage) {
                    throw new \InvalidArgumentException(sprintf('Message must be a NewThreadMessage instance, "%s" given', get_class($message)));
                 }
-                $first = $user;
-                $second = $message->getRecipient();
                 
-                $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadMetadataByParticipants($first, $second);
+                $thread = $this->getRepository('UlipseMessageBundle:ThreadMetadata')->getThreadMetadataByParticipants($user, $message->getRecipient());
 
-                if (!$thread) {
-                    $thread = $this->get('fos_message.composer')->newThread()
-                          ->setSubject($message->getSubject())
-                          ->addRecipient($message->getRecipient())
-                          ->setSender($user)
-                          ->setBody($message->getBody())
-                          ->getMessage();
-                   
-                } else {
-                    $thread = $this->get('fos_message.composer')->reply($thread)
-                                   ->setSender($user)
-                                   ->setBody($message->getBody())
-                                   ->getMessage();
-                }
-                $this->get('fos_message.sender')->send($thread);
-                
+                $message = ($thread) ? $this->get('ulipse.message_helper')->reply($thread, $message, $user) : $this->get('ulipse.message_helper')->send($message, $user);
+
                 return new RedirectResponse($this->get('router')->generate('fos_message_thread_view', array(
-                'threadId' => $thread->getThread()->getId()
-            )));
+                    'threadId' => $message->getThread()->getId()
+                )));
             }
         }
     }

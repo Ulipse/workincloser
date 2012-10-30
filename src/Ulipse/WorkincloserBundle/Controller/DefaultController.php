@@ -127,20 +127,8 @@ class DefaultController extends BaseController
         if (!\is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
-
-        $matching = $this->getRepository('UlipseWorkincloserBundle:Address')->getUsersMatchingWith($user);
-
-        return $this->render("UlipseWorkincloserBundle:Default:matching.html.twig", array('matching' => $matching));
-    }
-    
-    /**
-     * @Route("/fucking", name="fucking")
-     */
-    public function fuckingAction()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        var_dump($this->getRepository('UlipseWorkincloserBundle:Address')->getUsersMatchingWith($user));
-        exit;
         
+        return $this->render("UlipseWorkincloserBundle:Default:matching.html.twig", array(
+            'matching' => $this->getRepository('UlipseWorkincloserBundle:Address')->getUsersMatchingWith($user)));
     }
 }

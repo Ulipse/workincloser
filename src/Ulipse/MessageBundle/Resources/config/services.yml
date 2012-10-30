@@ -1,0 +1,7 @@
+parameters:
+    message_helper.class : Ulipse\MessageBundle\Helper\MessageHelper
+
+services:
+    ulipse.message_helper:
+        class: %message_helper.class%
+        arguments: [@fos_message.sender, @fos_message.composer]
